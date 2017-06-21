@@ -1,0 +1,46 @@
+<h1>Insert New actor</h1>
+
+<form novalidate="novalidate" class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="first_name">Actor first_name:</label>
+        <div class="controls">
+            <input type="text" class="form-control" id="first_name" ng-model="actor.first_name"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="last_name">Actor last_name:</label>
+        <div class="controls">
+            <input type="text" class="form-control" id="last_name" ng-model="actor.last_name"/>
+        </div>
+    </div>
+    <!-- <div class="control-group">
+        <label class="control-label" for="abv">ABV (%):</label>
+        <div class="controls">
+            <input type="text" class="form-control" id="abv" ng-model="actor.abv"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="titles">titles:</label>
+        <div class="controls">
+            <label ng-repeat="title in titles">
+            <input type="checkbox" name="titles[]" id="titles_{{title.name}}" ng-model="title.checked" value="{{title.name}}"> {{title.name}}
+            </label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="description">Description:</label>
+        <div class="controls">
+            <textarea id="description" class="form-control" ng-model="actor.description" rows="5"></textarea>
+        </div>
+    </div> -->
+    <div class="control-group" title="margin-top: 30px;">
+        <div class="controls">
+<!--
+            <a ng-click="updateUser()" class="btn btn-small btn-primary">update user</a>
+-->
+
+            <a ng-click="insertActor()" class="btn btn-small btn-primary">Save</a>
+            <a ng-click="cancel()" class="btn btn-small">Cancel</a>
+        </div>
+    </div>
+</form>
