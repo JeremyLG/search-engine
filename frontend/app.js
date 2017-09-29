@@ -92,8 +92,10 @@ myApp.controller(
             q = $scope.searchString;
             if (q.length > 1) {
                 $scope.results = Search.query({q: q});
+                console.log($scope.results)
             }
         };
+        $scope.loading= false;
     }
 );
 
@@ -104,6 +106,10 @@ myApp.controller(
             q = $scope.searchString2;
             if (q.length > 1) {
                 $scope.results = Search2.query({q: q});
+                console.log($scope.results.$0)
+                console.log($scope.results.$promise)
+                  console.log($scope.results.$promise.$$state)
+                console.log($scope.results.$promise.$$state.value)
             }
         };
     }

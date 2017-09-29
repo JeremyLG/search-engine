@@ -122,6 +122,45 @@ class TitleList(Resource):
         return data
 
 api.add_resource(TitleList, config.api_base_url+'/titles')
+class L(list):
+    """
+    A subclass of list that can accept additional attributes.
+    Should be able to be used just like a regular list.
+
+    The problem:
+    a = [1, 2, 4, 8]
+    a.x = "Hey!" # AttributeError: 'list' object has no attribute 'x'
+
+    The solution:
+    a = L(1, 2, 4, 8)
+    a.x = "Hey!"
+    print a       # [1, 2, 4, 8]
+    print a.x     # "Hey!"
+    print len(a)  # 4
+
+    You can also do these:
+    a = L( 1, 2, 4, 8 , x="Hey!" )                 # [1, 2, 4, 8]
+    a = L( 1, 2, 4, 8 )( x="Hey!" )                # [1, 2, 4, 8]
+    a = L( [1, 2, 4, 8] , x="Hey!" )               # [1, 2, 4, 8]
+    a = L( {1, 2, 4, 8} , x="Hey!" )               # [1, 2, 4, 8]
+    a = L( [2 ** b for b in range(4)] , x="Hey!" ) # [1, 2, 4, 8]
+    a = L( (2 ** b for b in range(4)) , x="Hey!" ) # [1, 2, 4, 8]
+    a = L( 2 ** b for b in range(4) )( x="Hey!" )  # [1, 2, 4, 8]
+    a = L( 2 )                                     # [2]
+    """
+    def __new__(self, *args, **kwargs):
+        return super(L, self).__new__(self, args, kwargs)
+
+    def __init__(self, *args, **kwargs):
+        if len(args) == 1 and hasattr(args[0], '__iter__'):
+            list.__init__(self, args[0])
+        else:
+            list.__init__(self, args)
+        self.__dict__.update(kwargs)
+
+    def __call__(self, **kwargs):
+        self.__dict__.update(kwargs)
+        return self
 
 class Search(Resource):
 
@@ -130,15 +169,6 @@ class Search(Resource):
         parser.add_argument('q')
         query_string = parser.parse_args()
         url = config.es_base_url['actors']+'/_search'
-        # query = {
-        #     "query": {
-        #         "multi_match": {
-        #             "fields": ["first_name","last_name"],
-        #             "query": query_string['q'],
-        #             "type": "cross_fields",
-        #             "use_dis_max": False
-        #         }
-        #     },
         query = {
             "query": {
                 "function_score": {
@@ -149,18 +179,20 @@ class Search(Resource):
                             "fuzziness": np.sqrt(len(query_string['q'])),
                             "analyzer": "autocomplete_search"}
                             },"field_value_factor": {
-                                "field": "id",
+                                "field": "popularity",
                                 "modifier": "log1p",
                                 "factor": 1},
                                 "boost_mode": "multiply", "max_boost": 1}
                                 },
-                    "size": 10
+                    "size": 12
         }
         resp = requests.post(url, data=json.dumps(query))
         data = resp.json()
-        actors = []
+        actors = L()
+        actors.took = data["took"]
         for hit in data['hits']['hits']:
             actor = hit['_source']
+            actor['ms'] = data["took"]
             actor['id'] = hit['_id']
             actors.append(actor)
         return actors
@@ -174,24 +206,13 @@ class Search2(Resource):
         parser.add_argument('q')
         query_string = parser.parse_args()
         url = config.es_base_url['titles']+'/_search'
-        # url = "http://localhost:9200/titles/_search"
-        # query = {
-        #     "query": {
-        #         "multi_match": {
-        #             "fields": ["short_title"],
-        #             "query": query_string['q'],
-        #             "type": "cross_fields",
-        #             "use_dis_max": False
-        #         }
-        #     },
-        #     "size": 100       }
         query = {
             "query": {
                 "function_score": {
                     "query": {
                         "multi_match": {
                             "query": query_string['q'],
-                            "fields": ["short_title","rubric","keywords"],
+                            "fields": ["short_title"],#,"rubric","keywords"],
                             "fuzziness": np.sqrt(len(query_string['q'])),
                             "analyzer": "autocomplete_search"}
                             },"field_value_factor": {
@@ -200,13 +221,15 @@ class Search2(Resource):
                                 "factor": 10},
                                 "boost_mode": "multiply", "max_boost": 10}
                                 },
-                    "size": 10
+                    "size": 12
         }
         resp = requests.post(url, data=json.dumps(query))
         data = resp.json()
-        actors = []
+        actors = L()
+        actors.took = data["took"]
         for hit in data['hits']['hits']:
             actor = hit['_source']
+            actor['ms'] = data["took"]
             actor['id'] = hit['_id']
             actors.append(actor)
         return actors

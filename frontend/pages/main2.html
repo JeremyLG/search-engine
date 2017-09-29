@@ -1,27 +1,31 @@
 <h1>SearchEngine Home2</h1>
-
-<div style="margin-top: 60px;">
-    <span class="col-md-6 col-md-offset-3">
-    <input type="text" class="form-control" ng-model="searchString2" placeholder='Search: e.g. "fuck" or "alex"' ng-change="search2()"/>
-    </span>
+<div class="row">
+    <div class="col-sm-6 col-offset-sm-3">
+      <input type="text" class="form-control" ng-model="searchString2" placeholder='Search: e.g. "manu" or "alex"' ng-change="search2()"/>
+  </div>
+      <div class="col-sm-12"> <br/></div>
 </div>
+<br/><h2>Request Time Execution : {{results[0].ms}} miliseconds</h2><br/>
+<div ng-hide="loading" class="row">
 
-<div class="clearfix"></div>
+    			<div class="col-sm-3" ng-repeat="result in results">
+            <div class="row">
 
-<table id="list_of_titles" class="table table-striped table-condensed" style="margin-top: 60px;">
-    <thead>
-    <tr>
-        <th style="min-width: 80px;">Short_tiles</th>
-        <th style="min-width: 80px;">Short_titl</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="result in results">
-        <td><a href="#/titles/{{result.id}}">{{ result.short_title }}</a></td>
-        <td>{{ result.short_title }}</td>
-    </tr>
-    </tbody>
-</table>
+                <div class="col-sm-12">
+                  <img class="img-responsive" height="300" width="150" ng-src="{{result.poster}}" />
 
-<a href="#/newTitle" class="btn btn-small btn-primary">Insert New Title</a>
-<a href="#/titles" class="btn btn-small btn-primary">Full List</a>
+                </div>
+                <div class="col-sm-12">
+    						<h4 class=""><strong>{{ result.short_title }}</strong></h4>
+
+        		</div>
+        	</div>
+      </div>
+
+<br/>
+    <div class="col-sm-12">
+      <a href="#/newTitle" class="btn btn-small btn-primary">Insert New Title</a>
+      <a href="#/titles" class="btn btn-small btn-primary">Full List</a>
+    </div>
+
+</div>

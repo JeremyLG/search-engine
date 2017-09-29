@@ -1,27 +1,61 @@
+
 <h1>SearchEngine Home</h1>
 
-<div style="margin-top: 60px;">
-    <span class="col-md-6 col-md-offset-3">
-    <input type="text" class="form-control" ng-model="searchString" placeholder='Search: e.g. "manu" or "alex"' ng-change="search()"/>
-    </span>
+<div class="row">
+    <div class="col-sm-6 col-offset-sm-3">
+      <input type="text" class="form-control" ng-model="searchString" placeholder='Search: e.g. "manu" or "alex"' ng-change="search()"/>
+  </div>
+      <div class="col-sm-12"> <br/></div>
 </div>
+<br/><h2>Request Time Execution : {{results[0].ms}} miliseconds</h2><br/>
+<div ng-hide="loading" class="row">
 
-<div class="clearfix"></div>
+    			<div class="col-sm-3" ng-repeat="result in results">
+            <div class="row">
 
-<table id="list_of_actors" class="table table-striped table-condensed" style="margin-top: 60px;">
+                <div class="col-sm-12">
+                  <img class="img-responsive" height="300" width="150" ng-src="{{result.poster}}" />
+
+                </div>
+                <div class="col-sm-12">
+    						<h4 class=""><strong>{{ result.last_name }} </strong> {{ result.first_name }}</h4>
+
+
+        		</div>
+        	</div>
+      </div>
+
+<br/>
+    <div class="col-sm-12">
+      <a href="#/newActor" class="btn btn-sm btn-primary">Insert New Actor</a>
+      <a href="#/actors" class="btn btn-sm btn-primary">Full List</a>
+    </div>
+
+</div>
+<!-- <div class="clearfix">
+      <div id="navlist">
+          <li ng-repeat="result in results">
+              <img ng-src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTk5ODk1NDkxMF5BMl5BanBnXkFtZTcwNTA5OTY0OQ@@._V1_UX182_CR0,0,182,268_AL_.jpg" />
+              <a href="#/actors/{{result.id}}">{{ result.first_name }}</a>
+              {{ result.last_name }}
+          </li>
+        </div>
+    </div> -->
+<!-- </div> -->
+
+<!-- <table id="list_of_actors" class="table table-striped table-condensed" style="margin-top: 60px;">
     <thead>
     <tr>
+        <th style="min-width: 100px;">Image</th>
         <th style="min-width: 80px;">First_name</th>
         <th style="min-width: 80px;">Last_name</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="result in results">
+        <td><img ng-src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTk5ODk1NDkxMF5BMl5BanBnXkFtZTcwNTA5OTY0OQ@@._V1_UX182_CR0,0,182,268_AL_.jpg" /></td>
         <td><a href="#/actors/{{result.id}}">{{ result.first_name }}</a></td>
         <td>{{ result.last_name }}</td>
     </tr>
     </tbody>
-</table>
-
-<a href="#/newActor" class="btn btn-small btn-primary">Insert New Actor</a>
-<a href="#/actors" class="btn btn-small btn-primary">Full List</a>
+</table> -->
