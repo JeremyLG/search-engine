@@ -1,0 +1,78 @@
+PUT actors_final
+{
+  "settings": {
+    "analysis": {
+      "analyzer": { 
+      "autocomplete" :{
+        "tokenizer" : "autocomplete",
+        "filter" : ["lowercase"]
+      },
+      "autocomplete_search": {
+        "tokenizer" : "lowercase"
+      }
+    },
+    "tokenizer":{
+      "autocomplete":{
+        "type":"edge_ngram",
+        "min_gram":2,
+        "max_gram":20,
+        "token_chars":[
+          "letter"]
+      }
+    }
+    }
+    },
+    "mappings":{
+      "movie":{
+        "properties":{
+          "first_name":{
+            "type":"text","fielddata":true,
+            "analyzer":"autocomplete",
+            "search_analyzer":"autocomplete_search"
+          },
+          "last_name":{
+            "type":"text","fielddata":true,
+            "analyzer":"autocomplete",
+            "search_analyzer":"autocomplete_search"
+          }
+        }
+      }
+    }
+  }
+
+PUT movies_final
+{
+  "settings": {
+    "analysis": {
+      "analyzer": { 
+      "autocomplete" :{
+        "tokenizer" : "autocomplete",
+        "filter" : ["lowercase"]
+      },
+      "autocomplete_search": {
+        "tokenizer" : "lowercase"
+      }
+    },
+    "tokenizer":{
+      "autocomplete":{
+        "type":"edge_ngram",
+        "min_gram":2,
+        "max_gram":20,
+        "token_chars":[
+          "letter"]
+      }
+    }
+    }
+    },
+    "mappings":{
+      "movie":{
+        "properties":{
+          "short_title":{
+            "type":"text","fielddata":true,
+            "analyzer":"autocomplete",
+            "search_analyzer":"autocomplete_search"
+          }
+        }
+      }
+    }
+  }
